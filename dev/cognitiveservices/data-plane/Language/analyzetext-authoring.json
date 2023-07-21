@@ -2,7 +2,7 @@
   "swagger": "2.0",
   "info": {
     "title": "Microsoft Cognitive Language Service - Analyze Text Authoring",
-    "version": "2022-07-01-preview",
+    "version": "2023-04-01",
     "description": "The language service API is a suite of natural language processing (NLP) skills built with best-in-class Microsoft machine learning algorithms. The API can be used to analyze unstructured text for tasks such as sentiment analysis, key phrase extraction, language detection and question answering. Further documentation can be found in <a href=\"https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview\">https://docs.microsoft.com/en-us/azure/cognitive-services/language-service/overview</a>."
   },
   "securityDefinitions": {
@@ -17,6 +17,7 @@
     },
     "apim_key": {
       "type": "apiKey",
+      "description": "A subscription key for a Language service resource.",
       "name": "Ocp-Apim-Subscription-Key",
       "in": "header"
     }
@@ -231,6 +232,13 @@
             "in": "query",
             "name": "assetKind",
             "description": "Kind of asset to export.",
+            "type": "string",
+            "x-ms-parameter-location": "method"
+          },
+          {
+            "in": "query",
+            "name": "trainedModelLabel",
+            "description": "Trained model label to export. If the trainedModelLabel is null, the default behavior is to export the current working copy.",
             "type": "string",
             "x-ms-parameter-location": "method"
           },
@@ -882,6 +890,49 @@
         }
       }
     },
+    "/authoring/analyze-text/projects/{projectName}/models/{trainedModelLabel}/:load-snapshot": {
+      "post": {
+        "description": "Restores the snapshot of this trained model to be the current working directory of the project.",
+        "operationId": "TextAnalysisAuthoring_LoadSnapshot",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "common.json#/parameters/ProjectNamePathParameter"
+          },
+          {
+            "$ref": "#/parameters/TextAnalysisAuthoringTrainedModelLabelPathParameter"
+          },
+          {
+            "$ref": "common.json#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "A successful call results in loading the working directory with the snapshot of the model provided.",
+            "headers": {
+              "operation-location": {
+                "description": "The location of the status API for monitoring the created job.",
+                "type": "string"
+              }
+            }
+          },
+          "default": {
+            "description": "Error response.",
+            "schema": {
+              "$ref": "common.json#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "x-ms-examples": {
+          "Successful Load Snapshot": {
+            "$ref": "./examples/analyzetext-authoring/SuccessfulLoadSnapshot.json"
+          }
+        },
+        "x-ms-long-running-operation": true
+      }
+    },
     "/authoring/analyze-text/projects/{projectName}/models/{trainedModelLabel}/evaluation/result": {
       "get": {
         "description": "Gets the detailed results of the evaluation for a trained model. This includes the raw inference results for the data included in the evaluation process.",
@@ -972,6 +1023,48 @@
         "x-ms-examples": {
           "Successful Get Model Evaluation Summary": {
             "$ref": "./examples/analyzetext-authoring/SuccessfulGetModelEvaluationSummary.json"
+          }
+        }
+      }
+    },
+    "/authoring/analyze-text/projects/{projectName}/models/{trainedModelLabel}/load-snapshot/jobs/{jobId}": {
+      "get": {
+        "description": "Gets the status for loading a snapshot.",
+        "operationId": "TextAnalysisAuthoring_GetLoadSnapshotStatus",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "$ref": "common.json#/parameters/ProjectNamePathParameter"
+          },
+          {
+            "$ref": "#/parameters/TextAnalysisAuthoringTrainedModelLabelPathParameter"
+          },
+          {
+            "$ref": "#/parameters/TextAnalysisAuthoringJobIdPathParameter"
+          },
+          {
+            "$ref": "common.json#/parameters/ApiVersionParameter"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The details of the long running operation.",
+            "schema": {
+              "$ref": "#/definitions/TextAnalysisAuthoringLoadSnapshotJobState"
+            }
+          },
+          "default": {
+            "description": "Error response.",
+            "schema": {
+              "$ref": "common.json#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "x-ms-examples": {
+          "Successful Get Load Snapshot Status": {
+            "$ref": "./examples/analyzetext-authoring/SuccessfulGetLoadSnapshotStatus.json"
           }
         }
       }
@@ -1151,6 +1244,9 @@
           "application/json"
         ],
         "parameters": [
+          {
+            "$ref": "#/parameters/TextAnalysisAuthoringProjectKindQueryOptionalParameter"
+          },
           {
             "$ref": "common.json#/parameters/TopParameter"
           },
@@ -2172,6 +2268,16 @@
       },
       "x-ms-client-name": "JobStatus"
     },
+    "TextAnalysisAuthoringLoadSnapshotJobState": {
+      "description": "Represents the state of loading a snapshot job.",
+      "type": "object",
+      "allOf": [
+        {
+          "$ref": "#/definitions/TextAnalysisAuthoringJobState"
+        }
+      ],
+      "x-ms-client-name": "LoadSnapshotJobState"
+    },
     "TextAnalysisAuthoringMultiLabelClassEvaluationSummary": {
       "description": "Represents the evaluation summary of a class in a multi-label classification project.",
       "required": [
@@ -2444,6 +2550,13 @@
     "TextAnalysisAuthoringProjectSettings": {
       "description": "Represents the settings used to define the project behavior.",
       "type": "object",
+      "properties": {
+        "confidenceThreshold": {
+          "format": "float",
+          "description": "The threshold of the class with the highest confidence, at which the prediction will automatically be changed to \"None\". The value of the threshold should be between 0 and 1 inclusive.",
+          "type": "number"
+        }
+      },
       "x-ms-client-name": "ProjectSettings"
     },
     "TextAnalysisAuthoringProjectsMetadata": {
@@ -2477,7 +2590,8 @@
         "lastTrainedDateTime",
         "lastTrainingDurationInSeconds",
         "modelExpirationDate",
-        "modelTrainingConfigVersion"
+        "modelTrainingConfigVersion",
+        "hasSnapshot"
       ],
       "type": "object",
       "properties": {
@@ -2507,6 +2621,10 @@
         "modelTrainingConfigVersion": {
           "description": "The model training config version.",
           "type": "string"
+        },
+        "hasSnapshot": {
+          "description": "The flag to indicate if the trained model has a snapshot ready.",
+          "type": "boolean"
         }
       },
       "x-ms-client-name": "ProjectTrainedModel"
@@ -2948,6 +3066,36 @@
       "description": "The trained model label.",
       "required": true,
       "type": "string",
+      "x-ms-parameter-location": "method"
+    },
+    "TextAnalysisAuthoringProjectKindQueryOptionalParameter": {
+      "in": "query",
+      "name": "projectKind",
+      "description": "The project kind, default value is CustomSingleLabelClassification.",
+      "type": "string",
+      "enum": [
+        "CustomSingleLabelClassification",
+        "CustomMultiLabelClassification",
+        "CustomEntityRecognition"
+      ],
+      "x-ms-enum": {
+        "name": "ProjectKind",
+        "modelAsString": true,
+        "values": [
+          {
+            "value": "CustomSingleLabelClassification",
+            "description": "For building a classification model to classify text using your own data. Each file will have only one label. For example, file 1 is classified as A and file 2 is classified as B."
+          },
+          {
+            "value": "CustomMultiLabelClassification",
+            "description": "For building a classification model to classify text using your own data. Each file can have one or many labels. For example, file 1 is classified as A, B, and C and file 2 is classified as B and C."
+          },
+          {
+            "value": "CustomEntityRecognition",
+            "description": "For building an extraction model to identify your domain categories using your own data."
+          }
+        ]
+      },
       "x-ms-parameter-location": "method"
     },
     "TextAnalysisAuthoringProjectKindQueryParameter": {
