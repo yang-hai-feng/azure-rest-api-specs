@@ -1,4 +1,6 @@
 {
+  "operationId": "LoadTestRun_ListTestRuns",
+  "title": "List test runs.",
   "parameters": {
     "testId": "12345678-1234-1234-1234-123456789012",
     "orderBy": "executedDateTime",
@@ -127,7 +129,7 @@
             "subnetId": "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/samplerg/providers/Microsoft.Network/virtualNetworks/samplenetworkresource/subnets/AAAAA0A0A0"
           }
         ],
-        "nextLink": "next link"
+        "nextLink": "https://00000000-0000-0000-aaaa-00aa00aa00aa.westus2.cnt-prod.loadtesting.azure.com/test-runs?orderby=executedDateTime%20desc&continuationToken=some-value&search=&testId=&executionFrom=&executionTo=&status=&maxpagesize=50&api-version=2022-11-01"
       }
     }
   }

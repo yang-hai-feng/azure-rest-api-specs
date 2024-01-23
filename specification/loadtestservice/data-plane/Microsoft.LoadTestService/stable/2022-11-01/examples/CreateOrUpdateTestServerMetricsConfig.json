@@ -1,4 +1,6 @@
 {
+  "operationId": "LoadTestAdministration_CreateOrUpdateServerMetricsConfig",
+  "title": "Add or update server metrics configuration for a load test.",
   "parameters": {
     "testId": "edc6e529-d009-4b99-b763-ca492e3a2823",
     "api-version": "2022-11-01",
