@@ -1,7 +1,7 @@
 {
   "parameters": {
     "Endpoint": "{Endpoint}",
-    "searchRequest": {
+    "body": {
       "keywords": null,
       "limit": 10,
       "filter": {
@@ -18,7 +18,7 @@
   "responses": {
     "200": {
       "body": {
-        "continuationToken": "eyJzZXNzaW9uSWQiOiI5ZWRiYmEzNC0wYmM0LTQxNGEtOTY2NC01OGM2ZTBkMzI3ODYiLCJvZmZzZXQiOjI1LCJyZXF1ZXN0SGFzaCI6IjZiMmFjMTlmMGExZjlmMjY2Nzc0ZDdhZDczNTE3OWJmIn0=",
+        "continuationToken": "<token>",
         "@search.count": 221,
         "value": [
           {
@@ -60,5 +60,7 @@
         ]
       }
     }
-  }
+  },
+  "title": "Discovery_Query_Type",
+  "operationId": "Discovery_Query"
 }

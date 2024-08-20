@@ -1,7 +1,7 @@
 {
   "parameters": {
     "Endpoint": "{Endpoint}",
-    "searchRequest": {
+    "body": {
       "keywords": null,
       "filter": {
         "objectType": "Tables"
@@ -31,7 +31,7 @@
   "responses": {
     "200": {
       "body": {
-        "continuationToken": "eyJzZXNzaW9uSWQiOiI5ZWRiYmEzNC0wYmM0LTQxNGEtOTY2NC01OGM2ZTBkMzI3ODYiLCJvZmZzZXQiOjI1LCJyZXF1ZXN0SGFzaCI6IjZiMmFjMTlmMGExZjlmMjY2Nzc0ZDdhZDczNTE3OWJmIn0=",
+        "continuationToken": "<token>",
         "@search.count": 5156,
         "@search.count.approximate": false,
         "@search.facets": {
@@ -144,5 +144,7 @@
         ]
       }
     }
-  }
+  },
+  "title": "Discovery_Query_Facet",
+  "operationId": "Discovery_Query"
 }

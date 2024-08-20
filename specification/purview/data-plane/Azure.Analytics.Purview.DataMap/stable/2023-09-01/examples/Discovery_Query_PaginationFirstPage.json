@@ -1,7 +1,7 @@
 {
   "parameters": {
     "Endpoint": "{Endpoint}",
-    "searchRequest": {
+    "body": {
       "keywords": "exampledata",
       "filter": {
         "and": [
@@ -67,7 +67,7 @@
       "body": {
         "@search.count": 6,
         "@search.count.approximate": false,
-        "continuationToken": "eyJzZXNzaW9uSWQiOiI5ZWRiYmEzNC0wYmM0LTQxNGEtOTY2NC01OGM2ZTBkMzI3ODYiLCJvZmZzZXQiOjI1LCJyZXF1ZXN0SGFzaCI6IjZiMmFjMTlmMGExZjlmMjY2Nzc0ZDdhZDczNTE3OWJmIn0=",
+        "continuationToken": "<token>",
         "value": [
           {
             "@search.score": 1.0,
@@ -104,5 +104,7 @@
         ]
       }
     }
-  }
+  },
+  "title": "Discovery_Query_PaginationFirstPage",
+  "operationId": "Discovery_Query"
 }

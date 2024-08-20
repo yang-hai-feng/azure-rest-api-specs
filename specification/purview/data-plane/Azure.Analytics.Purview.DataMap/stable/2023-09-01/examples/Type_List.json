@@ -1,7 +1,8 @@
 {
   "parameters": {
     "Endpoint": "{Endpoint}",
-    "includeTermTemplate": true
+    "includeTermTemplate": true,
+    "api-version": "2023-09-01"
   },
   "responses": {
     "200": {
@@ -265,5 +266,7 @@
         ]
       }
     }
-  }
+  },
+  "title": "Type_List",
+  "operationId": "Type_List"
 }

@@ -1,4 +1,6 @@
 {
+  "operationId": "AnalyzeTextSubmitJob",
+  "title": "SuccessfulAnalyzeTextJobsMultipleTaskSubmitRequest",
   "parameters": {
     "Ocp-Apim-Subscription-Key": "{API key}",
     "api-version": "2022-05-01",
@@ -42,7 +44,7 @@
   "responses": {
     "202": {
       "headers": {
-        "Operation-Location": "{endpoint}/language/analyze-text/jobs/{jobId}"
+        "Operation-Location": "{endpoint}/language/analyze-text/jobs/{jobId}?api-version=2022-05-01"
       }
     }
   }

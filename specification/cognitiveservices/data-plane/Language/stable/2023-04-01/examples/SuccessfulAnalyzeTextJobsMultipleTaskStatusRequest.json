@@ -1,4 +1,6 @@
 {
+  "operationId": "AnalyzeTextJobStatus",
+  "title": "SuccessfulAnalyzeTextJobsMultipleTaskStatusRequest",
   "parameters": {
     "Ocp-Apim-Subscription-Key": "{API key}",
     "api-version": "2023-04-01",
